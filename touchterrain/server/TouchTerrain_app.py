@@ -499,7 +499,8 @@ def export():
             height = width * (dlat / dlon) # get height from aspect ratio
             pix_per_tile = (width / pr) * (height / pr) # pixels in each dimension
             tot_pix = int((pix_per_tile * num_total_tiles) / div_by) # total pixels to print
-            print("total requested pixels to print", tot_pix, ", max is", MAX_CELLS_PERMITED, file=sys.stderr)
+            #print("total requested pixels to print", tot_pix, ", max is", MAX_CELLS_PERMITED, file=sys.stderr)
+            print("total requested pixels to print", tot_pix, file=sys.stderr) # experiment
         else:
             # estimates the total number of cells from area and arc sec resolution of source
             # this is done for the entire area, so number of cells is irrelevant
@@ -510,28 +511,38 @@ def export():
                                   "AU/GA/AUSTRALIA_5M_DEM": 1/18} # in arcseconds!
             cwas = float(cell_width_arcsecs[DEM_name])
             tot_pix = int((((dlon * 3600) / cwas) *  ((dlat * 3600) / cwas)) / div_by)
-            print("total requested pixels to print at a source resolution of", round(cwas,2), "arc secs is ", tot_pix, ", max is",  MAX_CELLS_PERMITED, file=sys.stderr)
+            #print("total requested pixels to print at a source resolution of", round(cwas,2), "arc secs is ", tot_pix, ", max is",  MAX_CELLS_PERMITED, file=sys.stderr)
+            print("total requested pixels to print at a source resolution of", round(cwas,2), "arc secs is ", tot_pix, file=sys.stderr)
+
 
         if tot_pix >  MAX_CELLS_PERMITED:
+            '''
             html = "Your requested job is too large! Please reduce the area (red box) or lower the print resolution<br>"
             html += "<br>Current total number of Kilo pixels is " + str(round(tot_pix / 1000, 2))
             html += " but must be less than " + str(round(MAX_CELLS_PERMITED / 1000, 2)) + " Kilo pixels"
             html +  "If you're trying to process multiple tiles: Consider using the only manual setting to instead print one tile at a time (https://chharding.github.io/TouchTerrain_for_CAGEO/)"
             html += "<br><br>Click \n"
-        
+            '''
+            # Experiment
+            html += "Total requested pixels to print: " + str(tot_pix) + "<br>"
+            html += "Your requested job is very large! You may run into the GoogleEarthEngine imposed download cap or your job may eventually consume <br>"
+            html += "enough server memory to make the job fail.<br>"
+            
             # print out the query parameter URL 
+            html += "<br>If this happens, click \n"
             html += '<a href = "'
             html += URL_query_str + '">' + "here" + "</a> to go back to the main page to make adjustments."
  
+
             # set timout flag to true, so the timeout script doesn't fire ...
             html += '''\n
                 <script type="text/javascript">
                     pageLoadedSuccessfully = true;
                 </script>'''
 
-            html +=  '</body></html>'
+            #html +=  '</body></html>'
             yield html
-            return "bailing out!"
+            #return "bailing out!" # Experiment
 
 
         # Set number of cores to use 
