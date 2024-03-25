@@ -466,10 +466,10 @@ def export():
                         html  += "Using polygon from kml file " + kml_file.filename + " with " + str(len(coords)) + " points.<br>"                   
         
         html += "<br>"
-        yield html
+        
 
         #
-        # bail out if the raster would be too large
+        # warn if the raster would is very large
         #
         width = args["tilewidth"]
         bllon = args["bllon"]
@@ -531,7 +531,7 @@ def export():
             # print out the query parameter URL 
             html += "<br>If this happens, click \n"
             html += '<a href = "'
-            html += URL_query_str + '">' + "here" + "</a> to go back to the main page to make adjustments."
+            html += URL_query_str + '">' + "here" + "</a> to go back to the main page to make adjustments. <br>"
  
 
             # set timout flag to true, so the timeout script doesn't fire ...
@@ -540,9 +540,9 @@ def export():
                     pageLoadedSuccessfully = true;
                 </script>'''
 
-            #html +=  '</body></html>'
-            yield html
-            #return "bailing out!" # Experiment
+             
+        yield html # print everything: log + possible warnings
+             
 
 
         # Set number of cores to use 
